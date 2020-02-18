@@ -1,0 +1,7 @@
+*.beam
+.*
+*.csv
+firstai.erl
+*.db
+*.org
+ebin/
