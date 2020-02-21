@@ -146,7 +146,7 @@ isCorrectValue([First|_]) when is_number(First) == false ->
 slice(Matrix, Indexes) when length(Indexes) == 2 -> %% NODE: add use "Indexes" how number, start with index 1
     [X,Len] = Indexes,
 
-    Slice = lists:sublist(Matrix, X + 1, Len),
+    Slice = lists:sublist(Matrix, X, Len),
     
     matrixNormalForm(Slice);
 
@@ -168,7 +168,7 @@ slice(Slice, _, _, _, H, _) when H == 0 ->
     Slice;
 
 slice(Slice, Matrix, Y, X, H, W) -> 
-    [Row|_] = lists:sublist(Matrix, Y+1, 1),
+    [Row|_] = lists:sublist(Matrix, Y, 1),
     SliceItem = slice(Row, [X, W]),
     slice(Slice ++ [SliceItem], Matrix, Y+1, X, H-1, W).    
 
@@ -177,19 +177,19 @@ correctIndexes(Matrix, Indexes) ->
     [M,N] = shape(Matrix),
     
     if	    
-	(Y+1 > M) or (X+1 > N) -> 
+	(Y > M) or (X > N) -> 
 	    NewIndexes = [];
-	(Y+H+1 > M) or (X+W+1 > N) ->
-	    case Y+H+1 > M of
+	(Y+H-1 > M) or (X+W-1 > N) ->
+	    case Y+H-1 > M of
 		true ->
-		    NewH = M - Y;
+		    NewH = M - Y + 1;
 		false -> 
 		    NewH = H
 	    end,
 	    
-	    case X+W+1 > N of
+	    case X+W-1 > N of
 		true ->
-		    NewW = N - X;
+		    NewW = N - X + 1;
 		false ->
 		    NewW = W
 	    end,
@@ -374,8 +374,8 @@ dotArrayRow(NewRow, RowFirst, Second) ->
 	    Column = Second,
 	    TailSecond = [];
 	true ->
-	    Column = slice(Second, [0, 0, M, 1]),
-	    TailSecond = slice(Second, [0, 1, M, N-1])
+	    Column = slice(Second, [1, 1, M, 1]),
+	    TailSecond = slice(Second, [1, 2, M, N-1])
     end,
 
     NewItem = dotVector(RowFirst, Column),

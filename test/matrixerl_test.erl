@@ -144,7 +144,7 @@ isCorrect_test() ->
 slice_test() ->
     Arr = [[1,2,3],
 	   [1,2,3]],
-    Slice = [0,0,1,3],
+    Slice = [1,1,1,3],
     E = [1,2,3],
     ?assertEqual(E, slice(Arr, Slice)),
 
@@ -154,24 +154,57 @@ slice_test() ->
     
     Arr3 = [[1,2,3],
 	   [1,2,3]],
-    Slice3 = [0,1,5,5],
+    Slice3 = [1,2,5,5],
     E3 = [[2,3],[2,3]],
     ?assertEqual(E3, slice(Arr3, Slice3)),
     
     Arr4 = [1,2,3,4,5,6],
-    Slice4 = [2,4],
+    Slice4 = [3,4],
     E4 = [3,4,5,6],
     ?assertEqual(E4, slice(Arr4, Slice4)),
     
     Arr5 = [1,2,3,4,5,6],
-    Slice5 = [0,0,2,2],
+    Slice5 = [1,1,2,2],
     E5 = [1,2],
     ?assertEqual(E5, slice(Arr5, Slice5)),
     
     Arr6 = Arr5,
-    Slice6 = [1,1,1,1],
+    Slice6 = [2,2,1,1],
     E6 = [],
-    ?assertEqual(E6, slice(Arr6, Slice6)).
+    ?assertEqual(E6, slice(Arr6, Slice6)),
+    
+    Arr7 = [[1,2,3,4,5,6,7],
+	    [9,8,7,6,5,4,3],
+	    [3,4,5,6,7,8,9],
+	    [9,8,7,6,5,4,3],
+	    [2,3,4,5,6,7,8],
+	    [0,1,2,3,4,5,6],
+	    [7,6,5,4,3,2,1]],
+    Slice7 = [2,2,1,1],
+    E7 = [8],
+    ?assertEqual(E7, slice(Arr7, Slice7)),
+    
+    Slice7_1 = [3,3,2,3],
+    E7_1 = [[5,6,7],
+	    [7,6,5]],
+    ?assertEqual(E7_1, slice(Arr7, Slice7_1)),
+
+    Slice7_2 = [5,5,3,3],
+    E7_2 = [[6,7,8],
+	    [4,5,6],
+	    [3,2,1]],
+    ?assertEqual(E7_2, slice(Arr7, Slice7_2)),
+
+    Slice7_3 = [5,5,2,2],
+    E7_3 = [[6,7],
+	    [4,5]],
+    ?assertEqual(E7_3, slice(Arr7, Slice7_3)),
+
+    Slice7_4 = [5,5,5,5],
+    E7_4 = [[6,7,8],
+	    [4,5,6],
+	    [3,2,1]],
+    ?assertEqual(E7_4, slice(Arr7, Slice7_4)).
     
 transpose_test() ->
     A = [[4], [5], [6]],
@@ -268,7 +301,6 @@ dot_test() ->
 	  [50],
 	  [40]],
 
-    error_logger:info_msg("test1~n~n~n"),
     ?assertEqual(E9, dot(A9, B9)).
     
 
