@@ -13,6 +13,7 @@
 	 dotVector/2,
 	 matrixNormalForm/1,
 	 random/1,
+	 nth/3,
 	 numers/2,
 	 stringListToMatrix/2,
 	 isVector/1,
@@ -422,6 +423,10 @@ random(Arr, M, N) ->
     Row = [rand:uniform() || _ <- lists:seq(1, N)],
     
     random(Arr ++ [Row], M-1, N).
+
+nth(M, N, Matrix) ->
+    Row = lists:nth(M, Matrix),
+    lists:nth(N, Row).
 
 numers(M, Num) when is_number(M) ->
     numers([], 1, M, Num);

@@ -16,6 +16,7 @@
 		    dotVector/2,
 		    matrixNormalForm/1,
 		    random/1,
+		    nth/3,
 		    numers/2,
 		    stringListToMatrix/2,
 		    isVector/1,
@@ -312,6 +313,21 @@ random_test() ->
     Shape4 = [1, 1],
     N = random(Shape4),
     ?assertEqual(is_number(N), true).
+
+nth_test() ->
+    M = [[1, 2],
+	 [3, 4]],
+    
+    ?assertEqual(3, nth(2, 1, M)),
+    
+    M1 = [[1, 2, 3],
+	  [4, 5, 6], 
+	  [7, 8, 9]],
+    
+    ?assertEqual(3, nth(1, 3, M1)),
+    ?assertEqual(1, nth(1, 1, M1)),
+    ?assertEqual(9, nth(3, 3, M1)),
+    ?assertEqual(5, nth(2, 2, M1)).
 
 numers_test() ->
     Shape = 1,
