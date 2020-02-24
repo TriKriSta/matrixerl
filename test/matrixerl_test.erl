@@ -11,6 +11,7 @@
 		    slice/2,
 		    transpose/1,
 		    join/2,
+		    join/3,
 		    dot/2,
 		    dot/3,
 		    dotVector/2,
@@ -217,15 +218,43 @@ join_test() ->
     B = [3, 4],
     
     E = [1, 2, 3, 4],
+    E_1 = [[1, 2],
+	   [3, 4]],
     
     ?assertEqual(E, join(A, B)),
+    ?assertEqual(E, join(A, B, horizontal)),
+    ?assertEqual(E_1, join(A, B, vertical)),
+
+    A1 = [[1],
+	  [2]],
+    B1 = [[3],
+	  [4]],
     
-    A1 = [[1], [2]],
-    B1 = [[3], [4]],
+    E1 = [[1, 3],
+	  [2, 4]],
+    E1_1 = [[1],
+	    [2],
+	    [3],
+	    [4]],
     
-    E1 = [[1, 3], [2, 4]],
+    ?assertEqual(E1, join(A1, B1)),
+    ?assertEqual(E1, join(A1, B1, horizontal)),
+    ?assertEqual(E1_1, join(A1, B1, vertical)),
     
-    ?assertEqual(E1, join(A1, B1)).
+    A2 = [1, 2, 3],
+    B2 = [[4, 5, 6],
+	  [7, 8, 9]],
+    
+    E2 = [[1, 2, 3],
+	  [4, 5, 6],
+	  [7, 8, 9]],
+    
+    E2_1 = [[4, 5, 6],
+	    [7, 8, 9],
+	    [1, 2, 3]],
+    
+    ?assertEqual(E2, join(A2, B2, vertical)),
+    ?assertEqual(E2_1, join(B2, A2, vertical)).
 
 dot_test() ->
     A = [1, 2, 3],

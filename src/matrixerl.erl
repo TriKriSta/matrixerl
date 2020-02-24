@@ -8,6 +8,7 @@
 	 slice/2,
 	 transpose/1,
 	 join/2,
+	 join/3,
 	 dot/2,
 	 dot/3,
 	 dotVector/2,
@@ -255,12 +256,30 @@ transposeOneRow(Column, Row) ->
     transposeOneRow(Column ++ [[First]], Tail).
 
 join(First, Second) ->
-    join([], First, Second).
+    joinHorizontal([], First, Second).
 
-join(JoinMatrix, [], []) ->
+join(First, Second, horizontal) ->
+    joinHorizontal([], First, Second);
+join(First, Second, vertical) ->
+    case isVector(First, row) of
+	true ->
+	    NFirst = [First];
+	false ->
+	    NFirst = First
+    end,
+
+    case isVector(Second, row) of
+	true ->
+	    NSecond = [Second];
+	false ->
+	    NSecond = Second
+    end,
+
+    NFirst ++ NSecond.
+
+joinHorizontal(JoinMatrix, [], []) ->
     JoinMatrix;
-
-join(JoinMatrix, First, Second) ->
+joinHorizontal(JoinMatrix, First, Second) ->
     [RowFirst|TailFirst] = First,
     [RowSecond|TailSecond] = Second,
     
@@ -269,7 +288,7 @@ join(JoinMatrix, First, Second) ->
 	    First ++ Second;
 	false ->
 	    RowJoin = RowFirst ++ RowSecond,
-	    join(JoinMatrix ++ [RowJoin], TailFirst, TailSecond)
+	    joinHorizontal(JoinMatrix ++ [RowJoin], TailFirst, TailSecond)
     end.
 
 dot(First, Second) when is_number(First) == true; is_number(Second) == true -> %% ???
@@ -449,7 +468,7 @@ numers(Arr, M, N, Num) ->
     numers(Arr ++ [Row], M-1, N, Num).
 
 
-isVector(Matrix, Type) when Type == row ->
+isVector(Matrix, row) ->
     [M,_] = shape(Matrix),
     
     [First|_] = Matrix,
@@ -466,7 +485,7 @@ isVector(Matrix, Type) when Type == row ->
 	    end
     end;
 
-isVector(Matrix, Type) when Type == column ->
+isVector(Matrix, column) ->
     [_,N] = shape(Matrix),
     
     case N == 1 of
