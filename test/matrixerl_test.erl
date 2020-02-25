@@ -21,7 +21,8 @@
 		    numers/2,
 		    stringListToMatrix/2,
 		    isVector/1,
-		    isVector/2]).
+		    isVector/2,
+		    det/1]).
 
 %% add test for MatrixNormalForm
 
@@ -450,3 +451,51 @@ isVector_test() ->
 	  [4, 5]],
 
     ?assertEqual(false, isVector(A2)).
+
+det_test() ->
+    M = [[1, 2, 3],
+	 [2, 3, 4]],
+    
+    A = {error, "wrong data"},
+    ?assertEqual(A, det(M)),
+    
+    M1 = [[1, 2, 3],
+	  [2, 3, 4],
+	  [3, 4, 5]],
+    
+    A1 = 0,  
+    ?assertEqual(A1, det(M1)),
+    
+
+    M2 = [[3, 4],
+	  [-1, 7]],
+    
+    A2 = 25,
+    ?assertEqual(A2, det(M2)),
+
+    M3 = [[2, -1, 2, 1],
+	  [4, 5, -4, 4],
+	  [9, 5, 7, 1],
+	  [4, 2, 8, 3]],
+    
+    A3 = 728,
+    ?assertEqual(A3, det(M3)),
+
+    M4 = [[2, 3, 4, 3, 4],
+	  [-1, 7, 1, 0, 11],
+	  [3, 7, 1, 8, 2],
+	  [1, 3, 9, -5, 2],
+	  [2, 4, 7, 4, 6]],
+    
+    A4 = -3435,
+    ?assertEqual(A4, det(M4)),
+    
+    M5 = [[1, 4, -4, 9, 10, 1],
+	  [3, 1, 8, -1, 2, 6],
+	  [-1, 3, 5, 2, 6, 8],
+	  [9, 7, 1, 9, 3, 6],
+	  [2, 8, 4, 6, 5, 5],
+	  [1, 8, 5, 5, 5, 4]],
+    
+    A5 = -195,
+    ?assertEqual(A5, det(M5)).

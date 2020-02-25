@@ -18,7 +18,8 @@
 	 numers/2,
 	 stringListToMatrix/2,
 	 isVector/1,
-	 isVector/2]).
+	 isVector/2,
+	 det/1]).
 
 sum(Matrix) when is_number(Matrix) ->
     Matrix;
@@ -527,3 +528,38 @@ toNumber(Str) ->
 	    F
     end.
 
+det(Matrix) ->
+    [M, N] = shape(Matrix),
+    
+    case M == N of
+	true ->
+	    det(M, Matrix);
+	false ->
+	    {error, "wrong data"}
+    end.
+
+det(2, Matrix) ->
+    [[X11, X12], [X21, X22]] = Matrix,
+    X11*X22-X12*X21;
+det(3, Matrix) ->
+    [[X11, X12, X13], [X21, X22, X23], [X31, X32, X33]] = Matrix,
+    X11*X22*X33+X12*X23*X31+X13*X21*X32-X13*X22*X31-X12*X21*X33-X11*X23*X32;
+det(M, Matrix) ->
+    det(0, 1, M, Matrix).
+
+det(Sum, Num, M, _Matrix) when Num > M  ->
+    Sum;
+det(Sum, Num, M, Matrix) -> 
+    Item = nth(Num, 1, Matrix),
+    SubMatrix = subMatrix(Num, M, Matrix),
+    Det = det(M-1, SubMatrix),
+    det(Sum + Det*Item*trunc(math:pow(-1, Num+1)), Num+1, M, Matrix).
+
+subMatrix(1, M, Matrix) ->
+    slice(Matrix, [2, 2, M-1, M-1]);
+subMatrix(Num, M, Matrix) when Num == M ->
+    slice(Matrix, [1, 2, M-1, M-1]);
+subMatrix(Num, M, Matrix) ->
+    First = slice(Matrix, [1, 2, Num-1, M-1]),
+    Second = slice(Matrix, [Num+1, 2, M-Num, M-1]),
+    join(First, Second, vertical).
