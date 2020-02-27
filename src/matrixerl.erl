@@ -256,9 +256,17 @@ transposeOneRow(Column, Row) ->
     [First|Tail] = Row,    
     transposeOneRow(Column ++ [[First]], Tail).
 
+join([], Second) ->
+    Second;
+join(First, []) ->
+    First;
 join(First, Second) ->
     joinHorizontal([], First, Second).
 
+join([], Second, _Type) ->
+    Second;
+join(First, [], _Type) ->
+    First;
 join(First, Second, horizontal) ->
     joinHorizontal([], First, Second);
 join(First, Second, vertical) ->

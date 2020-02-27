@@ -255,7 +255,30 @@ join_test() ->
 	    [1, 2, 3]],
     
     ?assertEqual(E2, join(A2, B2, vertical)),
-    ?assertEqual(E2_1, join(B2, A2, vertical)).
+    ?assertEqual(E2_1, join(B2, A2, vertical)),
+    
+    A3 = [1, 2, 3],
+    B3 = [],
+    
+    ?assertEqual(A3, join(A3, B3)),
+    ?assertEqual(A3, join(A3, B3, horizontal)),
+    ?assertEqual(A3, join(A3, B3, vertical)),
+    ?assertEqual(A3, join(B3, A3)),
+    ?assertEqual(A3, join(B3, A3, horizontal)),
+    ?assertEqual(A3, join(B3, A3, vertical)),
+
+    A4 = [[1, 2, 3],
+	  [1, 2, 2]],
+    
+    B4 = [],
+    
+    ?assertEqual(A4, join(A4, B4)),
+    ?assertEqual(A4, join(A4, B4, horizontal)),
+    ?assertEqual(A4, join(A4, B4, vertical)),
+    ?assertEqual(A4, join(B4, A4)),
+    ?assertEqual(A4, join(B4, A4, horizontal)),
+    ?assertEqual(A4, join(B4, A4, vertical)).
+    
 
 dot_test() ->
     A = [1, 2, 3],
