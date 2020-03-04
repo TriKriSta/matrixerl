@@ -206,7 +206,16 @@ slice_test() ->
     E7_4 = [[6,7,8],
 	    [4,5,6],
 	    [3,2,1]],
-    ?assertEqual(E7_4, slice(Arr7, Slice7_4)).
+    ?assertEqual(E7_4, slice(Arr7, Slice7_4)),
+    
+    Slice7_5 = [1,1,0,0],
+    ?assertEqual([], slice(Arr7, Slice7_5)),
+    
+    Slice7_6 = [1,1,1,0],
+    ?assertEqual([], slice(Arr7, Slice7_6)),
+    
+    Slice7_7 = [1,1,0,1],
+    ?assertEqual([], slice(Arr7, Slice7_7)).
     
 transpose_test() ->
     A = [[4], [5], [6]],

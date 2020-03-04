@@ -152,6 +152,8 @@ slice(Matrix, Indexes) when length(Indexes) == 2 -> %% NODE: add use "Indexes" h
     
     matrixNormalForm(Slice);
 
+slice(_Matrix, [_M, _N, Rows, Columns]) when (Rows == 0) or (Columns == 0) ->
+    [];
 slice(Matrix, Indexes) when length(Indexes) == 4 ->
     NewIndexes = correctIndexes(Matrix, Indexes),
 
