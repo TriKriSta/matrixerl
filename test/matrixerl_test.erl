@@ -16,6 +16,7 @@
 		    dot/3,
 		    dotVector/2,
 		    matrixNormalForm/1,
+		    minor/3,
 		    random/1,
 		    nth/3,
 		    numers/2,
@@ -386,7 +387,17 @@ matrixNormalForm_test() ->
     A2 = [[1, 3], [2, 5], [3, 8]],
     E2 = [[1, 3], [2, 5], [3, 8]],
     
-    ?assertEqual(E2, matrixNormalForm(A2)).    
+    ?assertEqual(E2, matrixNormalForm(A2)).
+
+minor_test() ->
+    M = [[1, 2, 3],
+	 [4, 5, 6],
+	 [7, 8, 9]],
+    
+    ?assertEqual(-3, minor(1, 1, M)),
+    ?assertEqual(-12, minor(2, 2, M)),
+    ?assertEqual(-3, minor(3, 3, M)),
+    ?assertEqual(-6, minor(2, 1, M)).
 
 random_test() ->
     Shape1 = [1, 11],

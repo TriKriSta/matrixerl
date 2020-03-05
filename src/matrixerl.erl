@@ -13,6 +13,7 @@
 	 dot/3,
 	 dotVector/2,
 	 matrixNormalForm/1,
+	 minor/3,
 	 random/1,
 	 nth/3,
 	 numers/2,
@@ -434,6 +435,11 @@ matrixNormalForm(Matrix) ->
 	    Matrix
     end.
 
+minor(M, N, Matrix) ->
+    [Ms, _] = shape(Matrix),
+    Sub = subMatrix(M, N, Ms, Matrix),
+    det(Sub).
+
 random(M) when is_number(M) ->
     random([], 1, M);
 
@@ -573,3 +579,11 @@ subMatrix(Num, M, Matrix) ->
     First = slice(Matrix, [1, 2, Num-1, M-1]),
     Second = slice(Matrix, [Num+1, 2, M-Num, M-1]),
     join(First, Second, vertical).
+
+subMatrix(M, N, Size, Matrix) ->
+    LT = slice(Matrix, [1, 1, M-1, N-1]),
+    RT = slice(Matrix, [1, N+1, M-1, Size-N]),
+    LB = slice(Matrix, [M+1, 1, Size-M, N-1]),
+    RB = slice(Matrix, [M+1, N+1, Size-M, Size-N]),
+
+    join(join(LT, RT), join(LB, RB), vertical).
