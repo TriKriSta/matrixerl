@@ -20,7 +20,8 @@
 	 stringListToMatrix/2,
 	 isVector/1,
 	 isVector/2,
-	 det/1]).
+	 det/1,
+	 cofactor/3]).
 
 sum(Matrix) when is_number(Matrix) ->
     Matrix;
@@ -575,6 +576,10 @@ det(Sum, Num, M, Matrix) ->
     SubMatrix = subMatrix(Num, M, Matrix),
     Det = det(M-1, SubMatrix),
     det(Sum + Det*Item*trunc(math:pow(-1, Num+1)), Num+1, M, Matrix).
+
+cofactor(M, N, Matrix) ->
+    Minor = minor(M, N, Matrix),
+    trunc(math:pow(-1, M+N)) * Minor.
 
 subMatrix(1, M, Matrix) ->
     slice(Matrix, [2, 2, M-1, M-1]);

@@ -23,7 +23,8 @@
 		    stringListToMatrix/2,
 		    isVector/1,
 		    isVector/2,
-		    det/1]).
+		    det/1,
+		    cofactor/3]).
 
 %% add test for MatrixNormalForm
 
@@ -551,3 +552,15 @@ det_test() ->
     
     A5 = -195,
     ?assertEqual(A5, det(M5)).
+
+cofactor_test() ->
+    M = [[1, 2, 3],
+	 [4, 5, 6],
+	 [7, 8, 9]],
+    
+    ?assertEqual(-3, cofactor(1, 1, M)),
+    ?assertEqual(-12, cofactor(2, 2, M)),
+    ?assertEqual(-3, cofactor(3, 3, M)),
+    ?assertEqual(6, cofactor(2, 1, M)),
+    ?assertEqual(6, cofactor(3, 2, M)),
+    ?assertEqual(6, cofactor(2, 3, M)).
