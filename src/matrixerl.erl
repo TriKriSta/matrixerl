@@ -152,7 +152,6 @@ slice(Matrix, Indexes) when length(Indexes) == 2 -> %% NODE: add use "Indexes" h
     Slice = lists:sublist(Matrix, X, Len),
     
     matrixNormalForm(Slice);
-
 slice(_Matrix, [_M, _N, Rows, Columns]) when (Rows == 0) or (Columns == 0) ->
     [];
 slice(Matrix, Indexes) when length(Indexes) == 4 ->
@@ -166,7 +165,13 @@ slice(Matrix, Indexes) when length(Indexes) == 4 ->
 	4 ->
 	    [Y,X,H,W] = NewIndexes,
 	    Slice = slice([], Matrix, Y, X, H, W),
-	    matrixNormalForm(Slice)
+	    [M, _] = shape(Slice),
+	    case M == 1 of
+		true ->
+		    matrixNormalForm(Slice);
+		false ->
+		    Slice
+	    end
     end.
 
 slice(Slice, _, _, _, H, _) when H == 0 ->

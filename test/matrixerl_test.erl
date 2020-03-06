@@ -216,7 +216,14 @@ slice_test() ->
     ?assertEqual([], slice(Arr7, Slice7_6)),
     
     Slice7_7 = [1,1,0,1],
-    ?assertEqual([], slice(Arr7, Slice7_7)).
+    ?assertEqual([], slice(Arr7, Slice7_7)),
+    
+    Slice7_8 = [2,2,4,1],
+    E7_8 = [[8],
+	    [4],
+	    [8],
+	    [3]],
+    ?assertEqual(E7_8, slice(Arr7, Slice7_8)).
     
 transpose_test() ->
     A = [[4], [5], [6]],
@@ -397,7 +404,9 @@ minor_test() ->
     ?assertEqual(-3, minor(1, 1, M)),
     ?assertEqual(-12, minor(2, 2, M)),
     ?assertEqual(-3, minor(3, 3, M)),
-    ?assertEqual(-6, minor(2, 1, M)).
+    ?assertEqual(-6, minor(2, 1, M)),
+    ?assertEqual(-6, minor(3, 2, M)),
+    ?assertEqual(-6, minor(2, 3, M)).
 
 random_test() ->
     Shape1 = [1, 11],
