@@ -573,22 +573,12 @@ det(Sum, Num, M, _Matrix) when Num > M  ->
     Sum;
 det(Sum, Num, M, Matrix) -> 
     Item = nth(Num, 1, Matrix),
-    SubMatrix = subMatrix(Num, M, Matrix),
-    Det = det(M-1, SubMatrix),
-    det(Sum + Det*Item*trunc(math:pow(-1, Num+1)), Num+1, M, Matrix).
+    Cof = cofactor(Num, 1, Matrix),
+    det(Sum + Item*Cof, Num+1, M, Matrix).
 
 cofactor(M, N, Matrix) ->
     Minor = minor(M, N, Matrix),
     trunc(math:pow(-1, M+N)) * Minor.
-
-subMatrix(1, M, Matrix) ->
-    slice(Matrix, [2, 2, M-1, M-1]);
-subMatrix(Num, M, Matrix) when Num == M ->
-    slice(Matrix, [1, 2, M-1, M-1]);
-subMatrix(Num, M, Matrix) ->
-    First = slice(Matrix, [1, 2, Num-1, M-1]),
-    Second = slice(Matrix, [Num+1, 2, M-Num, M-1]),
-    join(First, Second, vertical).
 
 subMatrix(M, N, Size, Matrix) ->
     LT = slice(Matrix, [1, 1, M-1, N-1]),
