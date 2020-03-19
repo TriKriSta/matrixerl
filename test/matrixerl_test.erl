@@ -13,6 +13,7 @@
 		    join/2,
 		    join/3,
 		    matrixNormalForm/1,
+		    max/1,
 		    minor/3,
 		    multiply/2,
 		    nth/3,
@@ -25,8 +26,6 @@
 		    sum/1,
 		    sum/2,
 		    transpose/1]).
-
-%% add test for MatrixNormalForm
 
 sum_test() ->
     ArrA = [[1,1,1],[2,2,2]],
@@ -396,6 +395,22 @@ matrixNormalForm_test() ->
     E2 = [[1, 3], [2, 5], [3, 8]],
     
     ?assertEqual(E2, matrixNormalForm(A2)).
+
+max_test() ->
+    M = [1, 3, 6, 8],
+    ?assertEqual(8, max(M)),
+    
+    M1 = [[4],
+	  [-1],
+	  [7],
+	  [0]],
+    ?assertEqual(7, max(M1)),
+    
+    M2 = [[1, 2, 3],
+	  [-1, 9, 10],
+	  [3, 9, 0]],
+    ?assertEqual(10, max(M2)).
+
 
 minor_test() ->
     M = [[1, 2, 3],
