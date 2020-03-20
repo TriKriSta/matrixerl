@@ -14,6 +14,7 @@
 		    join/3,
 		    matrixNormalForm/1,
 		    max/1,
+		    min/1,
 		    minor/3,
 		    multiply/2,
 		    nth/3,
@@ -411,6 +412,21 @@ max_test() ->
 	  [3, 9, 0]],
     ?assertEqual(10, max(M2)).
 
+min_test() ->
+    M = [1, 3, 6, 8],
+    ?assertEqual(1, min(M)),
+    
+    M1 = [[4],
+	  [-1],
+	  [7],
+	  [-1],
+	  [9]],
+    ?assertEqual(-1, min(M1)),
+    
+    M2 = [[1, 2, 3],
+	  [-1, 9, 10],
+	  [3, 9, 0]],
+    ?assertEqual(-1, min(M2)).
 
 minor_test() ->
     M = [[1, 2, 3],

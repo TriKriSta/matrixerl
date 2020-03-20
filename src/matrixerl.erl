@@ -1,6 +1,7 @@
 -module(matrixerl).
 
 -compile({no_auto_import,[max/2]}).
+-compile({no_auto_import,[min/2]}).
 
 -export([det/1,
 	 dot/2,
@@ -14,6 +15,7 @@
 	 join/3,
 	 matrixNormalForm/1,
 	 max/1,
+	 min/1,
 	 minor/3,
 	 multiply/2,
 	 nth/3,
@@ -463,6 +465,25 @@ max(Max, []) ->
 max(Max, [First|Tail]) ->
     NMax = lists:max(First),
     max(erlang:max(Max, NMax), Tail).
+
+min(Matrix) ->
+    NMatrix = matrixNormalForm(Matrix),
+    [M, _] = shape(NMatrix),
+    
+    case M == 1 of
+	true ->
+	    lists:min(NMatrix);
+	false ->
+	    [First|Tail] = NMatrix,
+	    Min = lists:min(First),
+	    min(Min, Tail)
+    end.
+    
+min(Min, []) ->
+    Min;
+min(Min, [First|Tail]) ->
+    NMin = lists:min(First),
+    min(erlang:min(Min, NMin), Tail).
 
 minor(M, N, Matrix) ->
     [Ms, _] = shape(Matrix),
