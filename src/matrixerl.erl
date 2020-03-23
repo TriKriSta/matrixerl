@@ -13,7 +13,6 @@
 	 isVector/2,
 	 join/2,
 	 join/3,
-	 matrixNormalForm/1,
 	 max/1,
 	 min/1,
 	 minor/3,
@@ -27,7 +26,8 @@
 	 subtraction/2,
 	 sum/1,
 	 sum/2,
-	 transpose/1]).
+	 transpose/1,
+	 vectorNormalForm/1]).
 
 sum(Matrix) when is_number(Matrix) ->
     Matrix;
@@ -63,7 +63,7 @@ mathFun(Fun, N, Arr) when is_number(N) == true ->
 mathFun(Fun, Arr, N) when is_number(N) == true ->
     case isVector(Arr, row) of
 	true ->
-	    ArrN = matrixNormalForm(Arr),
+	    ArrN = vectorNormalForm(Arr),
 	    [Fun(X, N) || X <- ArrN];
 	false ->
 	    FunOne = fun(X) -> Fun(X , N) end,
@@ -158,7 +158,7 @@ slice(Matrix, Indexes) when length(Indexes) == 2 -> %% NODE: add use "Indexes" h
 
     Slice = lists:sublist(Matrix, X, Len),
     
-    matrixNormalForm(Slice);
+    vectorNormalForm(Slice);
 slice(_Matrix, [_M, _N, Rows, Columns]) when (Rows == 0) or (Columns == 0) ->
     [];
 slice(Matrix, Indexes) when length(Indexes) == 4 ->
@@ -175,7 +175,7 @@ slice(Matrix, Indexes) when length(Indexes) == 4 ->
 	    [M, _] = shape(Slice),
 	    case M == 1 of
 		true ->
-		    matrixNormalForm(Slice);
+		    vectorNormalForm(Slice);
 		false ->
 		    Slice
 	    end
@@ -373,8 +373,8 @@ dotVector(First, Second) ->
 	    [Num|_] = Second,	
 	    multiply(First, Num);
 	true ->
-	    NormalF = matrixNormalForm(First),
-	    NormalS = matrixNormalForm(Second),
+	    NormalF = vectorNormalForm(First),
+	    NormalS = vectorNormalForm(Second),
 	    dotVector(0, NormalF, NormalS)
     end.
 
@@ -429,7 +429,7 @@ dotArrayRow(NewRow, RowFirst, Second) ->
 	    dotArrayRow(NewRow ++ [NewItem], RowFirst, TailSecond)
     end.
 
-matrixNormalForm(Matrix) ->
+vectorNormalForm(Matrix) ->
     [M, N] = shape(Matrix),
     
     if
@@ -437,18 +437,18 @@ matrixNormalForm(Matrix) ->
 	    [Arr|_] = Matrix,
 	    if
 		is_list(Arr) == true ->
-		    matrixNormalForm(Arr);
+		    vectorNormalForm(Arr);
 		true ->
 		    Matrix
 	    end;
 	N == 1 ->
-	    matrixNormalForm(transpose(Matrix));
+	    vectorNormalForm(transpose(Matrix));
 	true ->
 	    Matrix
     end.
 
 max(Matrix) ->
-    NMatrix = matrixNormalForm(Matrix),
+    NMatrix = vectorNormalForm(Matrix),
     [M, _] = shape(NMatrix),
     
     case M == 1 of
@@ -467,7 +467,7 @@ max(Max, [First|Tail]) ->
     max(erlang:max(Max, NMax), Tail).
 
 min(Matrix) ->
-    NMatrix = matrixNormalForm(Matrix),
+    NMatrix = vectorNormalForm(Matrix),
     [M, _] = shape(NMatrix),
     
     case M == 1 of
@@ -503,7 +503,7 @@ random([M, N]) ->
     random([], M, N).
 
 random(Arr, 0, _) ->
-    matrixNormalForm(Arr);
+    vectorNormalForm(Arr);
 
 random(Arr, M, N) ->
     Row = [rand:uniform() || _ <- lists:seq(1, N)],
@@ -527,7 +527,7 @@ numers([M, N], Num) ->
     numers([], M, N, Num).
 
 numers(Arr, 0, _, _Num) ->
-    matrixNormalForm(Arr);
+    vectorNormalForm(Arr);
 
 numers(Arr, M, N, Num) ->
     Row = lists:duplicate(N, Num),

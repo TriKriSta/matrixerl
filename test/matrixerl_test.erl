@@ -12,7 +12,6 @@
 		    isVector/2,
 		    join/2,
 		    join/3,
-		    matrixNormalForm/1,
 		    max/1,
 		    min/1,
 		    minor/3,
@@ -26,7 +25,8 @@
 		    subtraction/2,
 		    sum/1,
 		    sum/2,
-		    transpose/1]).
+		    transpose/1,
+		    vectorNormalForm/1]).
 
 sum_test() ->
     ArrA = [[1,1,1],[2,2,2]],
@@ -381,21 +381,21 @@ dotVector_test() ->
     E = 32,    
     ?assertEqual(E, dotVector(A, B)).
 
-matrixNormalForm_test() ->
+vectorNormalForm_test() ->
     A = [1, 2, 3],
     E = [1, 2, 3],
     
-    ?assertEqual(E, matrixNormalForm(A)),
+    ?assertEqual(E, vectorNormalForm(A)),
     
     A1 = [[1], [2], [3]],
     E1 = [1, 2, 3],
     
-    ?assertEqual(E1, matrixNormalForm(A1)),
+    ?assertEqual(E1, vectorNormalForm(A1)),
     
     A2 = [[1, 3], [2, 5], [3, 8]],
     E2 = [[1, 3], [2, 5], [3, 8]],
     
-    ?assertEqual(E2, matrixNormalForm(A2)).
+    ?assertEqual(E2, vectorNormalForm(A2)).
 
 max_test() ->
     M = [1, 3, 6, 8],
