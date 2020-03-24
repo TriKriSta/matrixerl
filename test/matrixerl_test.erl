@@ -2,6 +2,8 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
+-compile({no_auto_import,[max/2]}).
+
 -import(matrixerl, [det/1,
 		    dot/2,
 		    dot/3,
@@ -14,6 +16,7 @@
 		    join/3,
 		    matrixNormalForm/1,
 		    max/1,
+		    max/2,
 		    min/1,
 		    minor/3,
 		    multiply/2,
@@ -434,17 +437,28 @@ vectorNormalForm_test() ->
 max_test() ->
     M = [1, 3, 6, 8],
     ?assertEqual(8, max(M)),
+    ?assertEqual(8, max(M, rows)),
+    ?assertEqual(M, max(M, columns)),
     
     M1 = [[4],
 	  [-1],
 	  [7],
 	  [0]],
     ?assertEqual(7, max(M1)),
+    ?assertEqual(M1, max(M1, rows)),
+    ?assertEqual(7, max(M1, columns)),
     
     M2 = [[1, 2, 3],
 	  [-1, 9, 10],
 	  [3, 9, 0]],
-    ?assertEqual(10, max(M2)).
+
+    A2_1 = [[3],
+	    [10],
+	    [9]],
+    A2_2 = [3, 9, 10],
+    ?assertEqual(10, max(M2)),
+    ?assertEqual(A2_1, max(M2, rows)),
+    ?assertEqual(A2_2, max(M2, columns)).
 
 min_test() ->
     M = [1, 3, 6, 8],

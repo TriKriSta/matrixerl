@@ -15,6 +15,7 @@
 	 join/3,
 	 matrixNormalForm/1,
 	 max/1,
+	 max/2,
 	 min/1,
 	 minor/3,
 	 multiply/2,
@@ -474,14 +475,31 @@ max(Matrix) ->
 	false ->
 	    [First|Tail] = NMatrix,
 	    Max = lists:max(First),
-	    max(Max, Tail)
+	    max_(Max, Tail)
     end.
+
+max(Matrix, rows) ->
+    NMatrix = matrixNormalForm(Matrix),
+    transpose(maxItem_(NMatrix));
+max(Matrix, columns) ->
+    NMatrix = transpose(matrixNormalForm(Matrix)),
+    maxItem_(NMatrix).
     
-max(Max, []) ->
+max_(Max, []) ->
     Max;
-max(Max, [First|Tail]) ->
+max_(Max, [First|Tail]) ->
     NMax = lists:max(First),
-    max(erlang:max(Max, NMax), Tail).
+    max_(erlang:max(Max, NMax), Tail).
+
+maxItem_(Matrix) ->
+    [M, _] = shape(Matrix),
+    
+    case M == 1 of
+	true ->
+	    lists:max(Matrix);
+	false ->	    
+	    lists:map(fun(X) -> lists:max(X) end, Matrix)
+    end.
 
 min(Matrix) ->
     NMatrix = vectorNormalForm(Matrix),
