@@ -13,6 +13,7 @@
 	 isVector/2,
 	 join/2,
 	 join/3,
+	 matrixNormalForm/1,
 	 max/1,
 	 min/1,
 	 minor/3,
@@ -446,6 +447,22 @@ vectorNormalForm(Matrix) ->
 	true ->
 	    Matrix
     end.
+
+matrixNormalForm(Matrix) ->
+    [M, _] = shape(Matrix),
+    
+    case M == 1 of
+	true ->
+	    [Arr|_] = Matrix,
+	    case is_list(Arr) == true of
+		true ->
+		    Arr;
+		false ->
+		    Matrix
+	    end;
+	false ->
+	    Matrix
+    end.    
 
 max(Matrix) ->
     NMatrix = vectorNormalForm(Matrix),
