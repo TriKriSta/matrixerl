@@ -3,6 +3,7 @@
 -include_lib("eunit/include/eunit.hrl").
 
 -compile({no_auto_import,[max/2]}).
+-compile({no_auto_import,[min/2]}).
 
 -import(matrixerl, [det/1,
 		    dot/2,
@@ -18,6 +19,7 @@
 		    max/1,
 		    max/2,
 		    min/1,
+		    min/2,
 		    minor/3,
 		    multiply/2,
 		    nth/3,
@@ -463,6 +465,8 @@ max_test() ->
 min_test() ->
     M = [1, 3, 6, 8],
     ?assertEqual(1, min(M)),
+    ?assertEqual(1, min(M, rows)),
+    ?assertEqual(M, min(M, columns)),
     
     M1 = [[4],
 	  [-1],
@@ -470,11 +474,19 @@ min_test() ->
 	  [-1],
 	  [9]],
     ?assertEqual(-1, min(M1)),
+    ?assertEqual(M1, min(M1, rows)),
+    ?assertEqual(-1, min(M1, columns)),
     
     M2 = [[1, 2, 3],
 	  [-1, 9, 10],
 	  [3, 9, 0]],
-    ?assertEqual(-1, min(M2)).
+    A2_1 = [[1],
+	    [-1],
+	    [0]],
+    A2_2 = [-1, 2, 0],
+    ?assertEqual(-1, min(M2)),
+    ?assertEqual(A2_1, min(M2, rows)),
+    ?assertEqual(A2_2, min(M2, columns)).
 
 minor_test() ->
     M = [[1, 2, 3],

@@ -17,6 +17,7 @@
 	 max/1,
 	 max/2,
 	 min/1,
+	 min/2,
 	 minor/3,
 	 multiply/2,
 	 nth/3,
@@ -484,7 +485,6 @@ max(Matrix, rows) ->
 max(Matrix, columns) ->
     NMatrix = transpose(matrixNormalForm(Matrix)),
     maxItem_(NMatrix).
-    
 max_(Max, []) ->
     Max;
 max_(Max, [First|Tail]) ->
@@ -511,14 +511,31 @@ min(Matrix) ->
 	false ->
 	    [First|Tail] = NMatrix,
 	    Min = lists:min(First),
-	    min(Min, Tail)
+	    min_(Min, Tail)
     end.
     
-min(Min, []) ->
+min_(Min, []) ->
     Min;
-min(Min, [First|Tail]) ->
+min_(Min, [First|Tail]) ->
     NMin = lists:min(First),
-    min(erlang:min(Min, NMin), Tail).
+    min_(erlang:min(Min, NMin), Tail).
+
+min(Matrix, rows) ->
+    NMatrix = matrixNormalForm(Matrix),
+    transpose(minItem_(NMatrix));
+min(Matrix, columns) ->
+    NMatrix = transpose(matrixNormalForm(Matrix)),
+    minItem_(NMatrix).
+
+minItem_(Matrix) ->
+    [M, _] = shape(Matrix),
+    
+    case M == 1 of
+	true ->
+	    lists:min(Matrix);
+	false ->	    
+	    lists:map(fun(X) -> lists:min(X) end, Matrix)
+    end.
 
 minor(M, N, Matrix) ->
     [Ms, _] = shape(Matrix),
