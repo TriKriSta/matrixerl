@@ -16,6 +16,7 @@
 	 matrixNormalForm/1,
 	 max/1,
 	 max/2,
+	 mean/1,
 	 min/1,
 	 min/2,
 	 minor/3,
@@ -500,6 +501,28 @@ maxItem_(Matrix) ->
 	false ->	    
 	    lists:map(fun(X) -> lists:max(X) end, Matrix)
     end.
+
+mean(Matrix) ->
+    NMatrix = vectorNormalForm(Matrix),
+    [M, N] = shape(NMatrix),
+    
+    case M == 1 of
+	true ->
+	    Sum = lists:foldl(fun(X, Sum) -> X + Sum end, 0, NMatrix),
+	    Sum / N;
+	false ->
+	    Means = mean_([], NMatrix),
+      	    Sum = lists:foldl(fun(X, Sum) -> X + Sum end, 0, Means),
+	    Sum / M
+    end.
+
+mean_(Mean, []) ->
+    Mean;
+mean_(Mean, [First|Tail]) ->
+    Size = length(First),
+    Sum = lists:foldl(fun(X, Sum) -> X + Sum end, 0, First),
+    MeanItem = Sum / Size,
+    mean_(Mean ++ [MeanItem], Tail).
 
 min(Matrix) ->
     NMatrix = vectorNormalForm(Matrix),

@@ -18,6 +18,7 @@
 		    matrixNormalForm/1,
 		    max/1,
 		    max/2,
+		    mean/1,
 		    min/1,
 		    min/2,
 		    minor/3,
@@ -461,6 +462,23 @@ max_test() ->
     ?assertEqual(10, max(M2)),
     ?assertEqual(A2_1, max(M2, rows)),
     ?assertEqual(A2_2, max(M2, columns)).
+
+mean_test() ->
+    M = [3, -1, 4, 2],
+    ?assertEqual(2.0, mean(M)),
+    
+    M1 =[[0],
+	 [3],
+	 [1],
+	 [9],
+	 [7]],
+    ?assertEqual(4.0, mean(M1)),
+    
+    M2 = [[1, 5, 6, 9, 0],
+	  [-4, 4, 5, 6, 1],
+	  [11, 3, 7, 21, -5],
+	  [0, 3, 7, 9, 1]],
+    ?assertEqual(4.5, mean(M2)).
 
 min_test() ->
     M = [1, 3, 6, 8],
