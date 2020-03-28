@@ -17,6 +17,7 @@
 	 max/1,
 	 max/2,
 	 mean/1,
+	 mean/2,
 	 min/1,
 	 min/2,
 	 minor/3,
@@ -515,6 +516,29 @@ mean(Matrix) ->
       	    Sum = lists:foldl(fun(X, Sum) -> X + Sum end, 0, Means),
 	    Sum / M
     end.
+
+mean(Matrix, rows) ->
+    NMatrix = matrixNormalForm(Matrix),
+    transpose(meanItem_(NMatrix));
+mean(Matrix, columns) ->
+    NMatrix = transpose(matrixNormalForm(Matrix)),
+    meanItem_(NMatrix).
+
+meanItem_(Matrix) ->
+    [M, N] = shape(Matrix),
+    
+    case M == 1 of
+	true ->
+	    Sum = lists:foldl(fun(X, Sum) -> X + Sum end, 0, Matrix),
+	    Sum / N;
+	false ->
+	    lists:map(fun meanRow_/1, Matrix)
+    end.
+
+meanRow_(Matrix) ->
+    [_, N] = shape(Matrix),
+    Sum = lists:foldl(fun(X, Sum) -> X + Sum end, 0, Matrix),
+    Sum / N.
 
 mean_(Mean, []) ->
     Mean;

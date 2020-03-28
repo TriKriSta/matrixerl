@@ -19,6 +19,7 @@
 		    max/1,
 		    max/2,
 		    mean/1,
+		    mean/2,
 		    min/1,
 		    min/2,
 		    minor/3,
@@ -465,20 +466,37 @@ max_test() ->
 
 mean_test() ->
     M = [3, -1, 4, 2],
+    A = [3.0, -1.0, 4.0, 2.0],
     ?assertEqual(2.0, mean(M)),
+    ?assertEqual(2.0, mean(M, rows)),
+    ?assertEqual(A, mean(M, columns)),
     
     M1 =[[0],
 	 [3],
 	 [1],
 	 [9],
 	 [7]],
+    A1 =[[0.0],
+	 [3.0],
+	 [1.0],
+	 [9.0],
+	 [7.0]],
     ?assertEqual(4.0, mean(M1)),
+    ?assertEqual(A1, mean(M1, rows)),
+    ?assertEqual(4.0, mean(M1, columns)),
     
     M2 = [[1, 5, 6, 9, 0],
 	  [-4, 4, 5, 6, 1],
 	  [11, 3, 7, 21, -5],
 	  [0, 3, 7, 9, 1]],
-    ?assertEqual(4.5, mean(M2)).
+    A2_1 = [[4.2],
+	    [2.4],
+	    [7.4],
+	    [4.0]],
+    A2_2 = [2.0, 3.75, 6.25, 11.25, -0.75],
+    ?assertEqual(4.5, mean(M2)),
+    ?assertEqual(A2_1, mean(M2, rows)),
+    ?assertEqual(A2_2, mean(M2, columns)).
 
 min_test() ->
     M = [1, 3, 6, 8],
