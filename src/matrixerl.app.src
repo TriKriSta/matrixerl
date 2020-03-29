@@ -1,4 +1,4 @@
 {application, matrixerl,
    [{description, "MatrixErl"},
     {version, "0.1"},
-    {module, [matrixerl, function, weightsdb]}]}.
+    {module, [matrixerl]}]}.
