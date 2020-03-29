@@ -476,32 +476,18 @@ max(Matrix) ->
 	true ->
 	    lists:max(NMatrix);
 	false ->
-	    [First|Tail] = NMatrix,
-	    Max = lists:max(First),
-	    max_(Max, Tail)
+	    MaxRows = lists:map(fun(X) -> lists:max(X) end, NMatrix),
+	    lists:max(MaxRows)
     end.
 
 max(Matrix, rows) ->
-    NMatrix = matrixNormalForm(Matrix),
-    transpose(maxItem_(NMatrix));
+    Fun = fun(X) -> lists:max(X) end,
+    transpose(calcFunForRows_(Matrix, Fun));
 max(Matrix, columns) ->
-    NMatrix = transpose(matrixNormalForm(Matrix)),
-    maxItem_(NMatrix).
-max_(Max, []) ->
-    Max;
-max_(Max, [First|Tail]) ->
-    NMax = lists:max(First),
-    max_(erlang:max(Max, NMax), Tail).
+    NMatrix = transpose(Matrix),
 
-maxItem_(Matrix) ->
-    [M, _] = shape(Matrix),
-    
-    case M == 1 of
-	true ->
-	    lists:max(Matrix);
-	false ->	    
-	    lists:map(fun(X) -> lists:max(X) end, Matrix)
-    end.
+    Fun = fun(X) -> lists:max(X) end,
+    calcFunForRows_(NMatrix, Fun).
 
 mean(Matrix) ->
     NMatrix = vectorNormalForm(Matrix),
@@ -512,41 +498,20 @@ mean(Matrix) ->
 	    Sum = lists:foldl(fun(X, Sum) -> X + Sum end, 0, NMatrix),
 	    Sum / N;
 	false ->
-	    Means = mean_([], NMatrix),
-      	    Sum = lists:foldl(fun(X, Sum) -> X + Sum end, 0, Means),
+      	    Sum = lists:foldl(fun(X, Sum) -> meanRow_(X) + Sum end, 0, NMatrix),
 	    Sum / M
     end.
 
 mean(Matrix, rows) ->
-    NMatrix = matrixNormalForm(Matrix),
-    transpose(meanItem_(NMatrix));
+    transpose(calcFunForRows_(Matrix, fun meanRow_/1));
 mean(Matrix, columns) ->
-    NMatrix = transpose(matrixNormalForm(Matrix)),
-    meanItem_(NMatrix).
-
-meanItem_(Matrix) ->
-    [M, N] = shape(Matrix),
-    
-    case M == 1 of
-	true ->
-	    Sum = lists:foldl(fun(X, Sum) -> X + Sum end, 0, Matrix),
-	    Sum / N;
-	false ->
-	    lists:map(fun meanRow_/1, Matrix)
-    end.
+    NMatrix = transpose(Matrix),
+    calcFunForRows_(NMatrix, fun meanRow_/1).
 
 meanRow_(Matrix) ->
     [_, N] = shape(Matrix),
     Sum = lists:foldl(fun(X, Sum) -> X + Sum end, 0, Matrix),
     Sum / N.
-
-mean_(Mean, []) ->
-    Mean;
-mean_(Mean, [First|Tail]) ->
-    Size = length(First),
-    Sum = lists:foldl(fun(X, Sum) -> X + Sum end, 0, First),
-    MeanItem = Sum / Size,
-    mean_(Mean ++ [MeanItem], Tail).
 
 min(Matrix) ->
     NMatrix = vectorNormalForm(Matrix),
@@ -556,32 +521,27 @@ min(Matrix) ->
 	true ->
 	    lists:min(NMatrix);
 	false ->
-	    [First|Tail] = NMatrix,
-	    Min = lists:min(First),
-	    min_(Min, Tail)
+	    MinRows = lists:map(fun(X) -> lists:min(X) end, NMatrix),
+	    lists:min(MinRows)
     end.
-    
-min_(Min, []) ->
-    Min;
-min_(Min, [First|Tail]) ->
-    NMin = lists:min(First),
-    min_(erlang:min(Min, NMin), Tail).
 
 min(Matrix, rows) ->
-    NMatrix = matrixNormalForm(Matrix),
-    transpose(minItem_(NMatrix));
+    Fun = fun(X) -> lists:min(X) end,
+    transpose(calcFunForRows_(Matrix, Fun));
 min(Matrix, columns) ->
-    NMatrix = transpose(matrixNormalForm(Matrix)),
-    minItem_(NMatrix).
+    NMatrix = transpose(Matrix),
+    Fun = fun(X) -> lists:min(X) end,
+    calcFunForRows_(NMatrix, Fun).
 
-minItem_(Matrix) ->
-    [M, _] = shape(Matrix),
+calcFunForRows_(Matrix, Fun) ->
+    NMatrix = matrixNormalForm(Matrix),
+    [M, _] = shape(NMatrix),
     
     case M == 1 of
 	true ->
-	    lists:min(Matrix);
+	    Fun(NMatrix);
 	false ->	    
-	    lists:map(fun(X) -> lists:min(X) end, Matrix)
+	    lists:map(Fun, NMatrix)
     end.
 
 minor(M, N, Matrix) ->
