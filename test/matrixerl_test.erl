@@ -6,6 +6,7 @@
 -compile({no_auto_import,[min/2]}).
 
 -import(matrixerl, [det/1,
+		    divide/2,
 		    dot/2,
 		    dot/3,
 		    dotVector/2,
@@ -679,6 +680,19 @@ det_test() ->
     
     A5 = -195,
     ?assertEqual(A5, det(M5)).
+
+divide_test() ->
+    ?assertEqual(1.25, divide(5, 4)),
+
+    MA = [[8, 6],
+	  [9, -20]], 
+    MB = [[2, -3],
+	  [9, 5]],
+    
+    A = [[4.0, -2.0],
+	 [1.0, -4.0]],
+    
+    ?assertEqual(A, divide(MA, MB)).    
 
 cofactor_test() ->
     M = [[1, 2, 3],

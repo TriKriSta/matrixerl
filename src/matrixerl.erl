@@ -4,6 +4,7 @@
 -compile({no_auto_import,[min/2]}).
 
 -export([det/1,
+	 divide/2,
 	 dot/2,
 	 dot/3,
 	 dotVector/2,
@@ -678,6 +679,10 @@ det(Sum, Num, M, Matrix) ->
     Item = nth(Num, 1, Matrix),
     Cof = cofactor(Num, 1, Matrix),
     det(Sum + Item*Cof, Num+1, M, Matrix).
+
+divide(N1, N2) ->
+    Fun = fun(X, Y) -> X / Y end,
+    mathFun(Fun, N1, N2).
 
 cofactor(M, N, Matrix) ->
     Minor = minor(M, N, Matrix),
