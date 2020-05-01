@@ -11,6 +11,7 @@
 		    dot/3,
 		    dotVector/2,
 		    cofactor/3,
+		    invertible/1,
 		    isCorrect/1,
 		    isVector/1,
 		    isVector/2,
@@ -146,6 +147,20 @@ multiply_test() ->
     ?assertEqual(E2, multiply(Arr2, N)),
     ?assertEqual(E2, multiply(N, Arr2)),
     ?assertEqual(21, multiply(3, 7)).
+
+invertible_test() ->
+    M = [[1, 2, 3],
+	 [2, 3, 4]],
+    
+    ?assertException(throw, {badarg,_}, invertible(M)),
+
+    M1 = [[4, -5],
+	 [2, 1]],
+    
+    A1 = [[0.0714, 0.3571],
+	 [-0.1428, 0.2857]],
+    
+    ?assert(comp(A1, invertible(M1))).
 
 isCorrect_test() ->
     Arr = [[2, 2], [2, 2]],
@@ -535,7 +550,13 @@ minor_test() ->
     ?assertEqual(-3, minor(3, 3, M)),
     ?assertEqual(-6, minor(2, 1, M)),
     ?assertEqual(-6, minor(3, 2, M)),
-    ?assertEqual(-6, minor(2, 3, M)).
+    ?assertEqual(-6, minor(2, 3, M)),
+    
+    M1 = [[1, 2],
+	  [3, 4]],
+    
+    ?assertEqual(4, minor(1, 1, M1)),
+    ?assertEqual(1, minor(2, 2, M1)).    
 
 random_test() ->
     Shape1 = [1, 11],
@@ -637,8 +658,7 @@ det_test() ->
     M = [[1, 2, 3],
 	 [2, 3, 4]],
     
-    A = {error, "wrong data"},
-    ?assertEqual(A, det(M)),
+    ?assertException(throw, {badarg,_}, det(M)),
     
     M1 = [[1, 2, 3],
 	  [2, 3, 4],
@@ -705,3 +725,26 @@ cofactor_test() ->
     ?assertEqual(6, cofactor(2, 1, M)),
     ?assertEqual(6, cofactor(3, 2, M)),
     ?assertEqual(6, cofactor(2, 3, M)).
+
+comp([], []) ->
+    true;
+comp([X|XTail], [Y|YTail]) when is_list(X) ->
+    case comp(X, Y) of
+	true ->
+	    comp(XTail, YTail);
+	false ->
+	    false
+    end;
+comp([X|XTail], [Y|YTail]) ->
+    case comp(X, Y, 0.0001) of
+	true ->
+	    comp(XTail, YTail);
+	false ->
+	    false
+    end;
+comp(X, Y) ->
+    comp(X, Y, 0.0001).
+
+comp(X, Y, Err) ->
+    R = X - Y,
+    (-Err =< R) and (R =< Err).

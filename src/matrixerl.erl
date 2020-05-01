@@ -9,6 +9,7 @@
 	 dot/3,
 	 dotVector/2,
 	 cofactor/3,
+	 invertible/1,
 	 isCorrect/1,
 	 isVector/1,
 	 isVector/2,
@@ -116,6 +117,37 @@ shape(D, Arr) ->
 		    NewD
 	    end
     end.
+
+invertible(Matrix) ->
+    [M, N] = shape(Matrix),
+    
+    if
+	M /= N ->
+	    Msg = io_lib:format("wrong shape [~p, ~p]", [M, N]),
+	    throw({badarg, lists:flatten(Msg)});
+	true ->
+	    Det = det(Matrix),
+	    if
+		Det == 0 ->
+		    throw("invertible matrix does not exist, det = 0");
+		true ->
+		    I = invertible_([], 1, 1, M, N, Matrix),
+		    T = transpose(I),
+		    divide(T, Det)
+        end
+    end.
+
+invertible_(Cof, Mn, _Nn, M, _N, _Matrix) when Mn == M+1 ->
+    Cof;
+invertible_(Cof, Mn, Nn, M, N, Matrix) ->
+    CofRow = invertible_([], Mn, Nn, N, Matrix),
+    invertible_(Cof ++ [CofRow], Mn+1, Nn, M, N, Matrix).
+
+invertible_(Cof, _Mn, Nn, N, _Matrix) when Nn == N+1 ->
+    Cof;
+invertible_(Cof, Mn, Nn, N, Matrix) ->
+    CofItem = cofactor(Mn, Nn, Matrix),
+    invertible_(Cof ++ [CofItem], Mn, Nn+1, N, Matrix).
 
 isCorrect([]) ->
     true;
@@ -657,11 +689,15 @@ toNumber(Str) ->
 det(Matrix) ->
     [M, N] = shape(Matrix),
     
-    case M == N of
+    if 
+	M /= N ->
+	    Msg = io_lib:format("wrong shape [~p, ~p]", [M, N]),
+	    throw({badarg, lists:flatten(Msg)});
+	M == 1 ->
+	    [D] = Matrix,
+	    D;
 	true ->
-	    det(M, Matrix);
-	false ->
-	    {error, "wrong data"}
+	    det(M, Matrix)
     end.
 
 det(2, Matrix) ->
